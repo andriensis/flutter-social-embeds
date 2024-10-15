@@ -7,12 +7,12 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class SocialEmbed extends StatefulWidget {
-  final SocialMediaGenericEmbedData socialMediaObj;
+  final String htmlBody;
   final Color? backgroundColor;
   final double htmlScale;
   const SocialEmbed({
     Key? key,
-    required this.socialMediaObj,
+    required this.htmlBody,
     this.htmlScale = 1.0,
     this.backgroundColor,
   })  : assert(
@@ -22,52 +22,31 @@ class SocialEmbed extends StatefulWidget {
         super(key: key);
 
   @override
-  _SocialEmbedState createState() => _SocialEmbedState();
+  _SocialEmbedState createState() => _SocialEmbedState(htmlBody: htmlBody);
 }
 
 class _SocialEmbedState extends State<SocialEmbed> with WidgetsBindingObserver {
   double _webviewHeight = 300;
   late final WebViewController webViewController;
-  late String htmlBody;
+  final String htmlBody;
+  late SocialMediaGenericEmbedData embedData;
+
+  _SocialEmbedState({required this.htmlBody});
 
   @override
   void initState() {
     super.initState();
-    if (widget.socialMediaObj.supportMediaControll)
-      WidgetsBinding.instance.addObserver(this);
+
+    embedData = htmlToEmbedData(htmlBody);
 
     _initWebView();
-  }
-
-  @override
-  void dispose() {
-    if (widget.socialMediaObj.supportMediaControll)
-      WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    switch (state) {
-      case AppLifecycleState.resumed:
-        break;
-      case AppLifecycleState.detached:
-        webViewController.runJavaScript(widget.socialMediaObj.stopVideoScript);
-        break;
-      case AppLifecycleState.inactive:
-      case AppLifecycleState.paused:
-        webViewController.runJavaScript(widget.socialMediaObj.pauseVideoScript);
-        break;
-      case AppLifecycleState.hidden:
-        break;
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     final webView = WebViewWidget(controller: webViewController);
 
-    final ar = widget.socialMediaObj.aspectRatio;
+    final ar = embedData.aspectRatio;
     return (ar != null)
         ? ConstrainedBox(
             constraints: BoxConstraints(
@@ -103,7 +82,7 @@ class _SocialEmbedState extends State<SocialEmbed> with WidgetsBindingObserver {
           final color = colorToHtmlRGBA(getBackgroundColor(context));
           webViewController
               .runJavaScript('document.body.style= "background-color: $color"');
-          if (widget.socialMediaObj.aspectRatio == null)
+          if (embedData.aspectRatio == null)
             webViewController
                 .runJavaScript('setTimeout(() => sendHeight(), 0)');
         },
@@ -114,7 +93,7 @@ class _SocialEmbedState extends State<SocialEmbed> with WidgetsBindingObserver {
 
   void _setHeight(double height) {
     setState(() {
-      _webviewHeight = height + widget.socialMediaObj.bottomMargin;
+      _webviewHeight = height;
     });
   }
 
@@ -137,9 +116,9 @@ class _SocialEmbedState extends State<SocialEmbed> with WidgetsBindingObserver {
           </style>
         </head>
         <body>
-          <div id="widget" style="${widget.socialMediaObj.htmlInlineStyling}">${widget.socialMediaObj.htmlBody}</div>
-          ${(widget.socialMediaObj.aspectRatio == null) ? dynamicHeightScriptSetup : ''}
-          ${(widget.socialMediaObj.canChangeSize) ? dynamicHeightScriptCheck : ''}
+          <div id="widget">${embedData.htmlBody}</div>
+          ${(embedData.aspectRatio == null) ? dynamicHeightScriptSetup : ''}
+          ${(embedData.canChangeSize) ? dynamicHeightScriptCheck : ''}
         </body>
       </html>
     """;
