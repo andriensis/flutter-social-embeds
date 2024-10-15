@@ -5,8 +5,6 @@ import 'package:flutter_social_embeds/platforms/generic_platform.dart';
 import 'package:flutter_social_embeds/utils/common.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:webview_flutter_android/webview_flutter_android.dart';
-import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 
 class SocialEmbed extends StatefulWidget {
   final SocialMediaGenericEmbedData socialMediaObj;
@@ -84,17 +82,7 @@ class _SocialEmbedState extends State<SocialEmbed> with WidgetsBindingObserver {
   }
 
   _initWebView() {
-    late final PlatformWebViewControllerCreationParams params;
-    if (WebViewPlatform.instance is WebKitWebViewPlatform) {
-      params = WebKitWebViewControllerCreationParams(
-        allowsInlineMediaPlayback: true,
-        mediaTypesRequiringUserAction: const <PlaybackMediaTypes>{},
-      );
-    } else {
-      params = const PlatformWebViewControllerCreationParams();
-    }
-
-    webViewController = WebViewController.fromPlatformCreationParams(params)
+    webViewController = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..addJavaScriptChannel(
         'PageHeight',
@@ -120,12 +108,6 @@ class _SocialEmbedState extends State<SocialEmbed> with WidgetsBindingObserver {
                 .runJavaScript('setTimeout(() => sendHeight(), 0)');
         },
       ));
-
-    if (webViewController.platform is AndroidWebViewController) {
-      AndroidWebViewController.enableDebugging(true);
-      (webViewController.platform as AndroidWebViewController)
-          .setMediaPlaybackRequiresUserGesture(false);
-    }
 
     webViewController.loadRequest(htmlToURI(getHtmlBody()));
   }
