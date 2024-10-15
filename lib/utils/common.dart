@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_social_embeds/platforms/generic_platform.dart';
 import 'package:flutter_social_embeds/platforms/instagram.dart';
+import 'package:flutter_social_embeds/platforms/x_twitter.dart';
 
 Uri htmlToURI(String code) {
   return Uri.dataFromString(code,
@@ -14,5 +15,9 @@ String colorToHtmlRGBA(Color c) {
 }
 
 SocialMediaGenericEmbedData htmlToEmbedData(String embedHtml) {
-  return InstagramEmbedData(embedHtml: embedHtml);
+  if (embedHtml.contains('blockquote class="instagram-media"')) {
+    return InstagramEmbedData(embedHtml: embedHtml);
+  } else {
+    return XTwitterEmbedData(embedHtml: embedHtml);
+  }
 }
