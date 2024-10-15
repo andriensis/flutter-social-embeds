@@ -1,0 +1,55 @@
+{
+  "[dart]": {
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "editor.rulers": [
+      80
+    ],
+    "editor.selectionHighlight": false,
+    "editor.suggest.snippetsPreventQuickSuggestions": false,
+    "editor.suggestSelection": "first",
+    "editor.tabCompletion": "onlySnippets",
+    "editor.wordBasedSuggestions": "off",
+    "editor.codeActionsOnSave": {
+      "quickfix.insertSemicolon": "explicit"
+    }
+  },
+  "editor.bracketPairColorization.enabled": true,
+  "workbench.colorCustomizations": {
+    "editorBracketHighlight.foreground1": "#5caeef",
+    "editorBracketHighlight.foreground2": "#dfb976",
+    "editorBracketHighlight.foreground3": "#c172d9",
+    "editorBracketHighlight.foreground4": "#4fb1bc",
+    "editorBracketHighlight.foreground5": "#97c26c",
+    "editorBracketHighlight.foreground6": "#abb2c0",
+    "editorBracketHighlight.unexpectedBracket.foreground": "#db6165"
+  },
+  "rest-client.environmentVariables": {
+    "$shared": {},
+    "local": {
+      "apiHost": "api.local.bunte.de"
+    },
+    "develop": {
+      "apiHost": "api-develop.bunte.de"
+    }
+  },
+  "rest-client.logLevel": "verbose",
+  "dart.flutterSdkPath": ".fvm/flutter_sdk/bin",
+  "search.exclude": {
+    "**/.fvm": true
+  },
+  "files.watcherExclude": {
+    "**/.fvm": true
+  },
+  "koverage.coverageCommand": "fvm flutter pub run dlcov --coverage=0 --include-untested-files=true --lcov-gen=\"fvm flutter test --coverage\" --log=true --exclude-contents-path=.tests-coverage-ignore-patterns --exclude-files=$(paste -sd, .tests-coverage-ignore-files) && lcov --remove coverage/lcov.info $(sed \"s/^\\|$/\\'/g\" .tests-coverage-ignore-files | tr '\\n' ' ') -o coverage/lcov.info --ignore-errors unused,unused && lcov --remove coverage/lcov.info $(bash -c 'find . -type f -name \"*.dart\" -exec grep -l -f <(sed \"s/*//g\" .tests-coverage-ignore-patterns) {} + | sed \"s/^.\\///\" | tr \"\\n\" \" \"') -o coverage/lcov.info --ignore-errors  unused,unused",
+  "koverage.coverageFileNames": [
+    "lcov.info"
+  ],
+  "koverage.coverageFilePaths": [
+    "coverage"
+  ],
+  "koverage.lowCoverageThreshold": 70,
+  "koverage.sufficientCoverageThreshold": 80,
+  "koverage.autoRefresh": true,
+  "koverage.autoRefreshDebounce": 0
+}
