@@ -76,3 +76,5 @@ build/
 
 # FVM Version Cache
 .fvm/
+
+publish.md
