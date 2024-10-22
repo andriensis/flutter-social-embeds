@@ -1,8 +1,13 @@
-## [1.0.0] - 2024-10-15
-Added support of: 
+## [1.0.1]
+* Added support of: 
+    * TikTok widget
+    * YouTube widget
+
+## [1.0.0]
+* Added support of: 
     * Auto detect social widget
     * X (Twitter) widget
 
-## [0.1.1] - Initial Release: 2024-10-15
+## [0.1.1]
 * Added support of: 
     * Instagram widget
