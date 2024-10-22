@@ -60,7 +60,6 @@ const instagramEmbed =
       ),
     );
 ```
-
-![Instagram embed](docs/instagram.png)
-![X embed](docs/x.png)
-![YouTube embed](docs/youtube.png)
+<img src="https://raw.githubusercontent.com/andriensis/flutter-social-embeds/main/docs/instagram.png" alt="Instagram embed" width="200"/>
+<img src="https://raw.githubusercontent.com/andriensis/flutter-social-embeds/main/docs/x.png" alt="X embed" width="200"/>
+<img src="https://raw.githubusercontent.com/andriensis/flutter-social-embeds/main/docs/youtube.png" alt="YouTube embed" width="200"/>
