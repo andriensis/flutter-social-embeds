@@ -1,8 +1,11 @@
 import 'package:flutter_social_embeds/platforms/generic_platform.dart';
 
+/// YouTube embed data
 class YoutubeEmbedData extends SocialMediaGenericEmbedData {
+  /// ID of the YouTube video
   final String videoId;
 
+  /// Creates an instance of the embed data
   const YoutubeEmbedData({required this.videoId}) : super();
 
   @override
@@ -10,8 +13,7 @@ class YoutubeEmbedData extends SocialMediaGenericEmbedData {
 
   @override
   String get htmlBody =>
-      """
-    <div id="player" style="position: fixed; top: 0px;"></div>
+      """    <div id="player" style="position: fixed; top: 0px;"></div>
     <script>
       let player;
       function onYouTubeIframeAPIReady() {
@@ -32,6 +34,5 @@ class YoutubeEmbedData extends SocialMediaGenericEmbedData {
         player.pauseVideo();
       }
     </script>
-  """ +
-      htmlScript;
+  $htmlScript""";
 }

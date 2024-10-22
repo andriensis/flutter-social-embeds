@@ -1,27 +1,42 @@
-library flutter_social_embeds;
+library;
+
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_social_embeds/platforms/generic_platform.dart';
-import 'package:flutter_social_embeds/utils/common.dart';
+import 'package:flutter_social_embeds/platforms/instagram.dart';
+import 'package:flutter_social_embeds/platforms/tiktok.dart';
+import 'package:flutter_social_embeds/platforms/x_twitter.dart';
+import 'package:flutter_social_embeds/platforms/youtube.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+part 'utils/common.dart';
+
+/// Widget that displays a social embed html on a webview
 class SocialEmbed extends StatefulWidget {
+  /// HTML of the embedded widget
   final String htmlBody;
+
+  /// Optional background color of the widget
   final Color? backgroundColor;
+
+  /// Optional html scale (0.0 to 1.0) to reduce zoom of the embed
   final double htmlScale;
+
+  /// Provides a widget that displays a social embed script
   const SocialEmbed({
-    Key? key,
+    super.key,
     required this.htmlBody,
     this.htmlScale = 1.0,
     this.backgroundColor,
-  })  : assert(
+  }) : assert(
           htmlScale >= 0 && htmlScale <= 1,
           'htmlScale must be between 0.0 and 1.0',
-        ),
-        super(key: key);
+        );
 
   @override
+  // ignore: library_private_types_in_public_api
   _SocialEmbedState createState() => _SocialEmbedState(htmlBody: htmlBody);
 }
 
@@ -37,7 +52,7 @@ class _SocialEmbedState extends State<SocialEmbed> with WidgetsBindingObserver {
   void initState() {
     super.initState();
 
-    embedData = htmlToEmbedData(htmlBody);
+    embedData = _htmlToEmbedData(htmlBody);
 
     _initWebView();
   }
@@ -79,16 +94,17 @@ class _SocialEmbedState extends State<SocialEmbed> with WidgetsBindingObserver {
           return NavigationDecision.navigate;
         },
         onPageFinished: (url) {
-          final color = colorToHtmlRGBA(getBackgroundColor(context));
+          final color = _colorToHtmlRGBA(getBackgroundColor(context));
           webViewController
               .runJavaScript('document.body.style= "background-color: $color"');
-          if (embedData?.aspectRatio == null)
+          if (embedData?.aspectRatio == null) {
             webViewController
                 .runJavaScript('setTimeout(() => sendHeight(), 0)');
+          }
         },
       ));
 
-    webViewController.loadRequest(htmlToURI(getHtmlBody()));
+    webViewController.loadRequest(_htmlToURI(getHtmlBody()));
   }
 
   void _setHeight(double height) {

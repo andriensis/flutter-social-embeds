@@ -1,22 +1,15 @@
-import 'dart:convert';
+part of '../social_embed_webview.dart';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_social_embeds/platforms/generic_platform.dart';
-import 'package:flutter_social_embeds/platforms/instagram.dart';
-import 'package:flutter_social_embeds/platforms/tiktok.dart';
-import 'package:flutter_social_embeds/platforms/x_twitter.dart';
-import 'package:flutter_social_embeds/platforms/youtube.dart';
-
-Uri htmlToURI(String code) {
+Uri _htmlToURI(String code) {
   return Uri.dataFromString(code,
       mimeType: 'text/html', encoding: Encoding.getByName('utf-8'));
 }
 
-String colorToHtmlRGBA(Color c) {
+String _colorToHtmlRGBA(Color c) {
   return 'rgba(${c.red},${c.green},${c.blue},${c.alpha / 255})';
 }
 
-SocialMediaGenericEmbedData? htmlToEmbedData(String embedHtml) {
+SocialMediaGenericEmbedData? _htmlToEmbedData(String embedHtml) {
   if (embedHtml.contains('blockquote class="instagram-media"')) {
     return InstagramEmbedData(embedHtml: embedHtml);
   } else if (embedHtml.contains('blockquote class="tiktok-embed"')) {
