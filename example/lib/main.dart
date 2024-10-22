@@ -50,6 +50,14 @@ class _MyHomePageState extends State<MyHomePage> {
               htmlBody:
                   '<blockquote class="twitter-tweet"><p lang="en" dir="ltr">gonna start tweeting like I have 10 followers</p>&mdash; Opera GX (@operagxofficial) <a href="https://twitter.com/operagxofficial/status/1845867823765082224?ref_src=twsrc%5Etfw">October 14, 2024</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>',
             ),
+            // TikTok
+            SocialEmbed(
+                htmlBody:
+                    '<blockquote class="tiktok-embed" cite="https://www.tiktok.com/@scout2015/video/6718335390845095173" data-video-id="6718335390845095173" style="max-width: 605px;min-width: 325px;" > <section> <a target="_blank" title="@scout2015" href="https://www.tiktok.com/@scout2015?refer=embed">@scout2015</a> Scramble up ur name &#38; I’ll try to guess it😍❤️ <a title="foryoupage" target="_blank" href="https://www.tiktok.com/tag/foryoupage?refer=embed">#foryoupage</a> <a title="petsoftiktok" target="_blank" href="https://www.tiktok.com/tag/petsoftiktok?refer=embed">#petsoftiktok</a> <a title="aesthetic" target="_blank" href="https://www.tiktok.com/tag/aesthetic?refer=embed">#aesthetic</a> <a target="_blank" title="♬ original sound - tiff" href="https://www.tiktok.com/music/original-sound-6689804660171082501?refer=embed">♬ original sound - tiff</a> </section> </blockquote> <script async src="https://www.tiktok.com/embed.js"></script>'),
+            // Youtube
+            SocialEmbed(
+                htmlBody:
+                    '<iframe width="560" height="315" src="https://www.youtube.com/embed/7OvsVSWB4TI?si=g23aMoeWC0Q2VVj-" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>')
           ],
         ));
   }

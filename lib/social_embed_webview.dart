@@ -29,7 +29,7 @@ class _SocialEmbedState extends State<SocialEmbed> with WidgetsBindingObserver {
   double _webviewHeight = 300;
   late final WebViewController webViewController;
   final String htmlBody;
-  late SocialMediaGenericEmbedData embedData;
+  late SocialMediaGenericEmbedData? embedData;
 
   _SocialEmbedState({required this.htmlBody});
 
@@ -46,7 +46,7 @@ class _SocialEmbedState extends State<SocialEmbed> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     final webView = WebViewWidget(controller: webViewController);
 
-    final ar = embedData.aspectRatio;
+    final ar = embedData?.aspectRatio;
     return (ar != null)
         ? ConstrainedBox(
             constraints: BoxConstraints(
@@ -82,7 +82,7 @@ class _SocialEmbedState extends State<SocialEmbed> with WidgetsBindingObserver {
           final color = colorToHtmlRGBA(getBackgroundColor(context));
           webViewController
               .runJavaScript('document.body.style= "background-color: $color"');
-          if (embedData.aspectRatio == null)
+          if (embedData?.aspectRatio == null)
             webViewController
                 .runJavaScript('setTimeout(() => sendHeight(), 0)');
         },
@@ -116,9 +116,9 @@ class _SocialEmbedState extends State<SocialEmbed> with WidgetsBindingObserver {
           </style>
         </head>
         <body>
-          <div id="widget">${embedData.htmlBody}</div>
-          ${(embedData.aspectRatio == null) ? dynamicHeightScriptSetup : ''}
-          ${(embedData.canChangeSize) ? dynamicHeightScriptCheck : ''}
+          <div id="widget">${embedData?.htmlBody}</div>
+          ${(embedData?.aspectRatio == null) ? dynamicHeightScriptSetup : ''}
+          ${(embedData?.canChangeSize == true) ? dynamicHeightScriptCheck : ''}
         </body>
       </html>
     """;
