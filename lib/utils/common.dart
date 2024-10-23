@@ -22,7 +22,7 @@ SocialMediaGenericEmbedData? _htmlToEmbedData(String embedHtml) {
       String videoId = match.group(1)!;
       return YoutubeEmbedData(videoId: videoId);
     }
-  } else {
+  } else if (embedHtml.contains('blockquote class="twitter-tweet"')) {
     return XTwitterEmbedData(embedHtml: embedHtml);
   }
   return null;

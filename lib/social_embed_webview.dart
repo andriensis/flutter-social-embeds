@@ -38,6 +38,11 @@ class SocialEmbed extends StatefulWidget {
   @override
   // ignore: library_private_types_in_public_api
   _SocialEmbedState createState() => _SocialEmbedState(htmlBody: htmlBody);
+
+  /// Returns a nullable SocialMediaGenericEmbedData identifying any social embed on the html
+  /// [embedHtml] is the string containing the html embed
+  static SocialMediaGenericEmbedData? identifyEmbed(String embedHtml) =>
+      _htmlToEmbedData(embedHtml);
 }
 
 class _SocialEmbedState extends State<SocialEmbed> with WidgetsBindingObserver {
