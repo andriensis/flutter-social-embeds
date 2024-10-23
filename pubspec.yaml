@@ -1,6 +1,6 @@
 name: flutter_social_embeds
 description: Provide a widget to easily embed social media post in flutter using web embed feature by the platform
-version: 1.0.5
+version: 1.0.6
 homepage: https://github.com/andriensis/Flutter-Social-Embeds
 
 environment:
