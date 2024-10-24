@@ -1,3 +1,6 @@
+## [1.0.7]
+* Bugfix: improve background color handling
+
 ## [1.0.6]
 * Add identifyEmbed method
 
