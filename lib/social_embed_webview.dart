@@ -98,17 +98,18 @@ class _SocialEmbedState extends State<SocialEmbed> with WidgetsBindingObserver {
           }
           return NavigationDecision.navigate;
         },
+        onPageStarted: (url) => _setWebBackgroundColor(),
         onPageFinished: (url) {
-          final color = _colorToHtmlRGBA(getBackgroundColor(context));
-          webViewController
-              .runJavaScript('document.body.style= "background-color: $color"');
+          _setWebBackgroundColor();
           if (embedData?.aspectRatio == null) {
             webViewController
                 .runJavaScript('setTimeout(() => sendHeight(), 0)');
           }
         },
       ));
-
+    if (widget.backgroundColor != null) {
+      webViewController.setBackgroundColor(widget.backgroundColor!);
+    }
     webViewController.loadRequest(_htmlToURI(getHtmlBody()));
   }
 
@@ -116,6 +117,12 @@ class _SocialEmbedState extends State<SocialEmbed> with WidgetsBindingObserver {
     setState(() {
       _webviewHeight = height;
     });
+  }
+
+  void _setWebBackgroundColor() {
+    final color = _colorToHtmlRGBA(getBackgroundColor(context));
+    webViewController
+        .runJavaScript('document.body.style= "background-color: $color"');
   }
 
   Color getBackgroundColor(BuildContext context) {
