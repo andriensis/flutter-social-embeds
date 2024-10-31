@@ -1,3 +1,6 @@
+## [1.0.8]
+* Autodetect and format Instagram embed without blockquote html tag
+
 ## [1.0.7]
 * Bugfix: improve background color handling
 
