@@ -3,6 +3,7 @@ library;
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_social_embeds/platforms/facebook_post.dart';
 import 'package:flutter_social_embeds/platforms/generic_platform.dart';
 import 'package:flutter_social_embeds/platforms/instagram.dart';
 import 'package:flutter_social_embeds/platforms/tiktok.dart';
