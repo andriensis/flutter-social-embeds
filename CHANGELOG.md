@@ -1,3 +1,6 @@
+## [1.1.0]
+* Add Facebook posts embed integration
+
 ## [1.0.8]
 * Autodetect and format Instagram embed without blockquote html tag
 
