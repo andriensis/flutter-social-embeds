@@ -30,6 +30,8 @@ SocialMediaGenericEmbedData? _htmlToEmbedData(String embedHtml) {
     }
   } else if (embedHtml.contains('blockquote class="twitter-tweet"')) {
     return XTwitterEmbedData(embedHtml: embedHtml);
+  } else if (embedHtml.contains('https://www.facebook.com/plugins/post.php')) {
+    return FacebookPostEmbedData(embedHtml: embedHtml);
   }
   return null;
 }

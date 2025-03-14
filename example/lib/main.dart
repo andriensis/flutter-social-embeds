@@ -41,6 +41,9 @@ class _MyHomePageState extends State<MyHomePage> {
         '<blockquote class="tiktok-embed" cite="https://www.tiktok.com/@scout2015/video/6718335390845095173" data-video-id="6718335390845095173" style="max-width: 605px;min-width: 325px;" > <section> <a target="_blank" title="@scout2015" href="https://www.tiktok.com/@scout2015?refer=embed">@scout2015</a> Scramble up ur name &#38; I’ll try to guess it😍❤️ <a title="foryoupage" target="_blank" href="https://www.tiktok.com/tag/foryoupage?refer=embed">#foryoupage</a> <a title="petsoftiktok" target="_blank" href="https://www.tiktok.com/tag/petsoftiktok?refer=embed">#petsoftiktok</a> <a title="aesthetic" target="_blank" href="https://www.tiktok.com/tag/aesthetic?refer=embed">#aesthetic</a> <a target="_blank" title="♬ original sound - tiff" href="https://www.tiktok.com/music/original-sound-6689804660171082501?refer=embed">♬ original sound - tiff</a> </section> </blockquote> <script async src="https://www.tiktok.com/embed.js"></script>';
     const youtubeEmbed =
         '<iframe width="560" height="315" src="https://www.youtube.com/embed/7OvsVSWB4TI?si=g23aMoeWC0Q2VVj-" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>';
+
+    const facebookEmbed =
+        '<iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2FBunte.de%2Fposts%2Fpfbid02XJ4aueLAz3BisEcLtXQWZQuXQo1mjvx1JD5wTzgehjtaQcuqTx2sHNVapW1wetGUl&show_text=true&width=500" width="500" height="478" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>';
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -56,6 +59,8 @@ class _MyHomePageState extends State<MyHomePage> {
           SocialEmbed(
             htmlBody: xEmbed,
           ),
+          // Facebook Post
+          SocialEmbed(htmlBody: facebookEmbed),
           // TikTok
           SocialEmbed(htmlBody: tikTokEmbed),
           // Youtube
