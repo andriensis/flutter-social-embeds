@@ -9,12 +9,12 @@ class TikTokEmbedData extends SocialMediaGenericEmbedData {
   /// Default iframe height; the WebView resizes to match after load.
   static const double embedHeight = 920;
 
+  /// TikTok embed data
   const TikTokEmbedData({required this.videoId}) : super(canChangeSize: true);
 
   /// Extracts a video id from blockquote, iframe, or TikTok URL markup.
   static String? extractVideoId(String embedHtml) {
-    final dataVideoId =
-        RegExp(r'data-video-id="(\d+)"').firstMatch(embedHtml);
+    final dataVideoId = RegExp(r'data-video-id="(\d+)"').firstMatch(embedHtml);
     if (dataVideoId != null) return dataVideoId.group(1);
 
     final cite = RegExp(

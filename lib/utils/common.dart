@@ -6,7 +6,7 @@ Uri _htmlToURI(String code) {
 }
 
 String _colorToHtmlRGBA(Color c) {
-  return 'rgba(${c.red},${c.green},${c.blue},${c.alpha / 255})';
+  return 'rgba(${c.r},${c.g},${c.b},${c.a / 255})';
 }
 
 SocialMediaGenericEmbedData? _htmlToEmbedData(String embedHtml) {
