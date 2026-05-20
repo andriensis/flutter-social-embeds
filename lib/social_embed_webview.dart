@@ -12,6 +12,7 @@ import 'package:flutter_social_embeds/platforms/pbs.dart';
 import 'package:flutter_social_embeds/platforms/soundcloud.dart';
 import 'package:flutter_social_embeds/platforms/spotify.dart';
 import 'package:flutter_social_embeds/platforms/tiktok.dart';
+import 'package:flutter_social_embeds/platforms/vimeo.dart';
 import 'package:flutter_social_embeds/platforms/x_twitter.dart';
 import 'package:flutter_social_embeds/platforms/youtube.dart';
 import 'package:url_launcher/url_launcher.dart';

@@ -46,6 +46,8 @@ SocialMediaGenericEmbedData? _htmlToEmbedData(String embedHtml) {
     return SoundCloudEmbedData.fromMarkup(embedHtml);
   } else if (embedHtml.contains('player.pbs.org')) {
     return PbsEmbedData.fromMarkup(embedHtml);
+  } else if (embedHtml.contains('vimeo.com')) {
+    return VimeoEmbedData.fromMarkup(embedHtml);
   }
   return null;
 }
