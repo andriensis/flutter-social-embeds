@@ -7,6 +7,7 @@ import 'package:flutter_social_embeds/platforms/facebook_post.dart';
 import 'package:flutter_social_embeds/platforms/generic_platform.dart';
 import 'package:flutter_social_embeds/platforms/instagram.dart';
 import 'package:flutter_social_embeds/platforms/omny.dart';
+import 'package:flutter_social_embeds/platforms/spotify.dart';
 import 'package:flutter_social_embeds/platforms/tiktok.dart';
 import 'package:flutter_social_embeds/platforms/x_twitter.dart';
 import 'package:flutter_social_embeds/platforms/youtube.dart';
@@ -64,6 +65,8 @@ class _SocialEmbedState extends State<SocialEmbed> with WidgetsBindingObserver {
       _webviewHeight = TikTokEmbedData.embedHeight;
     } else if (embedData is OmnyEmbedData) {
       _webviewHeight = (embedData as OmnyEmbedData).height;
+    } else if (embedData is SpotifyEmbedData) {
+      _webviewHeight = (embedData as SpotifyEmbedData).height;
     }
 
     _initWebView();
