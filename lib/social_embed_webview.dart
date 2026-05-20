@@ -8,6 +8,7 @@ import 'package:flutter_social_embeds/platforms/generic_platform.dart';
 import 'package:flutter_social_embeds/platforms/instagram.dart';
 import 'package:flutter_social_embeds/platforms/megaphone.dart';
 import 'package:flutter_social_embeds/platforms/omny.dart';
+import 'package:flutter_social_embeds/platforms/soundcloud.dart';
 import 'package:flutter_social_embeds/platforms/spotify.dart';
 import 'package:flutter_social_embeds/platforms/tiktok.dart';
 import 'package:flutter_social_embeds/platforms/x_twitter.dart';
@@ -70,6 +71,8 @@ class _SocialEmbedState extends State<SocialEmbed> with WidgetsBindingObserver {
       _webviewHeight = (embedData as SpotifyEmbedData).height;
     } else if (embedData is MegaphoneEmbedData) {
       _webviewHeight = (embedData as MegaphoneEmbedData).height;
+    } else if (embedData is SoundCloudEmbedData) {
+      _webviewHeight = (embedData as SoundCloudEmbedData).height;
     }
 
     _initWebView();

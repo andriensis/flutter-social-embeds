@@ -42,6 +42,8 @@ SocialMediaGenericEmbedData? _htmlToEmbedData(String embedHtml) {
     return SpotifyEmbedData.fromMarkup(embedHtml);
   } else if (embedHtml.contains('megaphone.fm')) {
     return MegaphoneEmbedData.fromMarkup(embedHtml);
+  } else if (embedHtml.contains('soundcloud.com')) {
+    return SoundCloudEmbedData.fromMarkup(embedHtml);
   }
   return null;
 }
