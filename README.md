@@ -2,7 +2,7 @@
 
 This package lets you show social network embeds on your app.
 
-Updated package to use Flutter a min of 3.35.0
+Updated package to use Flutter a minimum of 3.35.0.
 
 ## Supported Platforms:
 * Instagram
