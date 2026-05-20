@@ -44,6 +44,8 @@ SocialMediaGenericEmbedData? _htmlToEmbedData(String embedHtml) {
     return MegaphoneEmbedData.fromMarkup(embedHtml);
   } else if (embedHtml.contains('soundcloud.com')) {
     return SoundCloudEmbedData.fromMarkup(embedHtml);
+  } else if (embedHtml.contains('player.pbs.org')) {
+    return PbsEmbedData.fromMarkup(embedHtml);
   }
   return null;
 }

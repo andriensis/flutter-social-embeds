@@ -8,6 +8,7 @@ import 'package:flutter_social_embeds/platforms/generic_platform.dart';
 import 'package:flutter_social_embeds/platforms/instagram.dart';
 import 'package:flutter_social_embeds/platforms/megaphone.dart';
 import 'package:flutter_social_embeds/platforms/omny.dart';
+import 'package:flutter_social_embeds/platforms/pbs.dart';
 import 'package:flutter_social_embeds/platforms/soundcloud.dart';
 import 'package:flutter_social_embeds/platforms/spotify.dart';
 import 'package:flutter_social_embeds/platforms/tiktok.dart';
