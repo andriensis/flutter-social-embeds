@@ -40,6 +40,8 @@ SocialMediaGenericEmbedData? _htmlToEmbedData(String embedHtml) {
     return OmnyEmbedData.fromMarkup(embedHtml);
   } else if (embedHtml.contains('open.spotify.com')) {
     return SpotifyEmbedData.fromMarkup(embedHtml);
+  } else if (embedHtml.contains('megaphone.fm')) {
+    return MegaphoneEmbedData.fromMarkup(embedHtml);
   }
   return null;
 }
