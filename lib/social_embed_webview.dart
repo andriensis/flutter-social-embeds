@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_social_embeds/platforms/facebook_post.dart';
 import 'package:flutter_social_embeds/platforms/generic_platform.dart';
 import 'package:flutter_social_embeds/platforms/instagram.dart';
+import 'package:flutter_social_embeds/platforms/omny.dart';
 import 'package:flutter_social_embeds/platforms/tiktok.dart';
 import 'package:flutter_social_embeds/platforms/x_twitter.dart';
 import 'package:flutter_social_embeds/platforms/youtube.dart';
@@ -61,6 +62,8 @@ class _SocialEmbedState extends State<SocialEmbed> with WidgetsBindingObserver {
     embedData = _htmlToEmbedData(htmlBody);
     if (embedData is TikTokEmbedData) {
       _webviewHeight = TikTokEmbedData.embedHeight;
+    } else if (embedData is OmnyEmbedData) {
+      _webviewHeight = (embedData as OmnyEmbedData).height;
     }
 
     _initWebView();
@@ -108,8 +111,10 @@ class _SocialEmbedState extends State<SocialEmbed> with WidgetsBindingObserver {
         onPageFinished: (url) {
           _setWebBackgroundColor();
           if (embedData?.aspectRatio == null) {
-            webViewController
-                .runJavaScript('setTimeout(() => sendHeight(), 0)');
+            webViewController.runJavaScript(
+              'setTimeout(() => sendHeight(), 0);'
+              'setTimeout(() => sendHeight(), 500);',
+            );
           }
         },
       ));

@@ -36,6 +36,8 @@ SocialMediaGenericEmbedData? _htmlToEmbedData(String embedHtml) {
     return XTwitterEmbedData(embedHtml: embedHtml);
   } else if (embedHtml.contains('https://www.facebook.com/plugins/post.php')) {
     return FacebookPostEmbedData(embedHtml: embedHtml);
+  } else if (embedHtml.contains('omny.fm')) {
+    return OmnyEmbedData.fromMarkup(embedHtml);
   }
   return null;
 }
