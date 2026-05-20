@@ -59,6 +59,9 @@ class _SocialEmbedState extends State<SocialEmbed> with WidgetsBindingObserver {
     super.initState();
 
     embedData = _htmlToEmbedData(htmlBody);
+    if (embedData is TikTokEmbedData) {
+      _webviewHeight = TikTokEmbedData.embedHeight;
+    }
 
     _initWebView();
   }
@@ -83,6 +86,8 @@ class _SocialEmbedState extends State<SocialEmbed> with WidgetsBindingObserver {
 
   _initWebView() {
     webViewController = WebViewController()
+      ..setUserAgent(
+          "Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36")
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..addJavaScriptChannel(
         'PageHeight',
@@ -111,7 +116,16 @@ class _SocialEmbedState extends State<SocialEmbed> with WidgetsBindingObserver {
     if (widget.backgroundColor != null) {
       webViewController.setBackgroundColor(widget.backgroundColor!);
     }
-    webViewController.loadRequest(_htmlToURI(getHtmlBody()));
+    _loadHtml(getHtmlBody());
+  }
+
+  void _loadHtml(String html) {
+    final baseUrl = embedData?.htmlBaseUrl;
+    if (baseUrl != null) {
+      webViewController.loadHtmlString(html, baseUrl: baseUrl);
+    } else {
+      webViewController.loadRequest(_htmlToURI(html));
+    }
   }
 
   void _setHeight(double height) {
@@ -130,6 +144,8 @@ class _SocialEmbedState extends State<SocialEmbed> with WidgetsBindingObserver {
     return widget.backgroundColor ?? Theme.of(context).scaffoldBackgroundColor;
   }
 
+  String get _widgetHtml => embedData?.htmlBody ?? htmlBody;
+
   String getHtmlBody() => """
       <html>
         <head>
@@ -145,7 +161,7 @@ class _SocialEmbedState extends State<SocialEmbed> with WidgetsBindingObserver {
           </style>
         </head>
         <body>
-          <div id="widget">${embedData?.htmlBody}</div>
+          <div id="widget">$_widgetHtml</div>
           ${(embedData?.aspectRatio == null) ? dynamicHeightScriptSetup : ''}
           ${(embedData?.canChangeSize == true) ? dynamicHeightScriptCheck : ''}
         </body>

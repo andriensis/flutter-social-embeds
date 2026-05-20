@@ -9,6 +9,9 @@ class YoutubeEmbedData extends SocialMediaGenericEmbedData {
   const YoutubeEmbedData({required this.videoId}) : super();
 
   @override
+  String get htmlBaseUrl => 'https://www.youtube.com/';
+
+  @override
   String get htmlScriptUrl => 'https://www.youtube.com/iframe_api';
 
   @override
