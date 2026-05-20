@@ -3,6 +3,7 @@ library;
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_social_embeds/platforms/bluesky.dart';
 import 'package:flutter_social_embeds/platforms/facebook_post.dart';
 import 'package:flutter_social_embeds/platforms/generic_platform.dart';
 import 'package:flutter_social_embeds/platforms/instagram.dart';
@@ -54,9 +55,10 @@ class SocialEmbed extends StatefulWidget {
 
 class _SocialEmbedState extends State<SocialEmbed> with WidgetsBindingObserver {
   double _webviewHeight = 300;
-  late final WebViewController webViewController;
+  late WebViewController webViewController;
   final String htmlBody;
   late SocialMediaGenericEmbedData? embedData;
+  bool _webViewReady = false;
 
   _SocialEmbedState({required this.htmlBody});
 
@@ -77,11 +79,41 @@ class _SocialEmbedState extends State<SocialEmbed> with WidgetsBindingObserver {
       _webviewHeight = (embedData as SoundCloudEmbedData).height;
     }
 
+    final bluesky = embedData;
+    if (bluesky is BlueskyEmbedData && bluesky.needsOEmbed) {
+      _resolveBlueskyEmbed(bluesky.pendingPostUrl!);
+    } else {
+      _webViewReady = true;
+      _initWebView();
+    }
+  }
+
+  Future<void> _resolveBlueskyEmbed(String postUrl) async {
+    final html = await BlueskyEmbedData.fetchOEmbedHtml(postUrl);
+    if (!mounted) return;
+    embedData = BlueskyEmbedData(
+      embedHtml: html ?? BlueskyEmbedData.fallbackEmbedHtml(postUrl),
+    );
+    _webViewReady = true;
     _initWebView();
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    if (!_webViewReady) {
+      return SizedBox(
+        height: _webviewHeight / 100 * widget.htmlScale * 100,
+        child: const Center(
+          child: SizedBox(
+            width: 24,
+            height: 24,
+            child: CircularProgressIndicator(strokeWidth: 2),
+          ),
+        ),
+      );
+    }
+
     final webView = WebViewWidget(controller: webViewController);
 
     final ar = embedData?.aspectRatio;
@@ -98,7 +130,7 @@ class _SocialEmbedState extends State<SocialEmbed> with WidgetsBindingObserver {
             child: webView);
   }
 
-  _initWebView() {
+  void _initWebView() {
     webViewController = WebViewController()
       ..setUserAgent(
           "Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36")
@@ -118,9 +150,9 @@ class _SocialEmbedState extends State<SocialEmbed> with WidgetsBindingObserver {
           }
           return NavigationDecision.navigate;
         },
-        onPageStarted: (url) => _setWebBackgroundColor(),
+        onPageStarted: (url) => _setWebBackgroundColor(webViewController),
         onPageFinished: (url) {
-          _setWebBackgroundColor();
+          _setWebBackgroundColor(webViewController);
           if (embedData?.aspectRatio == null) {
             webViewController.runJavaScript(
               'setTimeout(() => sendHeight(), 0);'
@@ -132,15 +164,15 @@ class _SocialEmbedState extends State<SocialEmbed> with WidgetsBindingObserver {
     if (widget.backgroundColor != null) {
       webViewController.setBackgroundColor(widget.backgroundColor!);
     }
-    _loadHtml(getHtmlBody());
+    _loadHtml(webViewController, getHtmlBody());
   }
 
-  void _loadHtml(String html) {
+  void _loadHtml(WebViewController controller, String html) {
     final baseUrl = embedData?.htmlBaseUrl;
     if (baseUrl != null) {
-      webViewController.loadHtmlString(html, baseUrl: baseUrl);
+      controller.loadHtmlString(html, baseUrl: baseUrl);
     } else {
-      webViewController.loadRequest(_htmlToURI(html));
+      controller.loadRequest(_htmlToURI(html));
     }
   }
 
@@ -150,9 +182,9 @@ class _SocialEmbedState extends State<SocialEmbed> with WidgetsBindingObserver {
     });
   }
 
-  void _setWebBackgroundColor() {
+  void _setWebBackgroundColor(WebViewController controller) {
     final color = _colorToHtmlRGBA(getBackgroundColor(context));
-    webViewController
+    controller
         .runJavaScript('document.body.style= "background-color: $color"');
   }
 

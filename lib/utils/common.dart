@@ -32,6 +32,10 @@ SocialMediaGenericEmbedData? _htmlToEmbedData(String embedHtml) {
       String videoId = match.group(1)!;
       return YoutubeEmbedData(videoId: videoId);
     }
+  } else if (embedHtml.contains('bluesky-embed') ||
+      embedHtml.contains('embed.bsky.app') ||
+      embedHtml.contains('bsky.app/profile')) {
+    return BlueskyEmbedData.fromMarkup(embedHtml);
   } else if (embedHtml.contains('blockquote class="twitter-tweet"')) {
     return XTwitterEmbedData(embedHtml: embedHtml);
   } else if (embedHtml.contains('https://www.facebook.com/plugins/post.php')) {
