@@ -2,6 +2,7 @@ library;
 
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart' show defaultTargetPlatform, TargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:flutter_social_embeds/platforms/bluesky.dart';
 import 'package:flutter_social_embeds/platforms/facebook_post.dart';
@@ -26,7 +27,7 @@ class SocialEmbed extends StatefulWidget {
   /// HTML of the embedded widget
   final String htmlBody;
 
-  /// Optional background color of the widget
+  /// Optional background color of the widget. Defaults to transparent.
   final Color? backgroundColor;
 
   /// Optional html scale (0.0 to 1.0) to reduce zoom of the embed
@@ -59,6 +60,7 @@ class _SocialEmbedState extends State<SocialEmbed> with WidgetsBindingObserver {
   final String htmlBody;
   late SocialMediaGenericEmbedData? embedData;
   bool _webViewReady = false;
+  Set<String> _allowedNavigationHosts = {};
 
   _SocialEmbedState({required this.htmlBody});
 
@@ -130,10 +132,80 @@ class _SocialEmbedState extends State<SocialEmbed> with WidgetsBindingObserver {
             child: webView);
   }
 
+  static String get _userAgent {
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      return 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) '
+          'AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 '
+          'Safari/604.1';
+    }
+    return 'Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) '
+        'Chrome/124.0.0.0 Mobile Safari/537.36';
+  }
+
+  Set<String> _collectAllowedHosts() {
+    final hosts = <String>{};
+
+    void addHost(String? host) {
+      if (host != null && host.isNotEmpty) {
+        hosts.add(host.toLowerCase());
+      }
+    }
+
+    final baseUrl = embedData?.htmlBaseUrl;
+    if (baseUrl != null) {
+      addHost(Uri.tryParse(baseUrl)?.host);
+    }
+
+    final sources = '${embedData?.htmlBody ?? ''}$htmlBody';
+    for (final match in RegExp(r'https?://([^/"<>]+)').allMatches(sources)) {
+      addHost(match.group(1));
+    }
+
+    return hosts;
+  }
+
+  bool _isAllowedEmbedNavigation(Uri uri) {
+    if (uri.scheme == 'about' || uri.scheme == 'blob') {
+      return true;
+    }
+    if (!uri.hasScheme || uri.host.isEmpty) {
+      return true;
+    }
+
+    final host = uri.host.toLowerCase();
+    for (final allowed in _allowedNavigationHosts) {
+      if (host == allowed || host.endsWith('.$allowed')) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  Future<NavigationDecision> _onNavigationRequest(
+    NavigationRequest request,
+  ) async {
+    if (!request.isMainFrame) {
+      return NavigationDecision.navigate;
+    }
+
+    final uri = Uri.tryParse(request.url);
+    if (uri == null || _isAllowedEmbedNavigation(uri)) {
+      return NavigationDecision.navigate;
+    }
+
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+      return NavigationDecision.prevent;
+    }
+
+    return NavigationDecision.navigate;
+  }
+
   void _initWebView() {
+    _allowedNavigationHosts = _collectAllowedHosts();
+
     webViewController = WebViewController()
-      ..setUserAgent(
-          "Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36")
+      ..setUserAgent(_userAgent)
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..addJavaScriptChannel(
         'PageHeight',
@@ -142,14 +214,7 @@ class _SocialEmbedState extends State<SocialEmbed> with WidgetsBindingObserver {
         },
       )
       ..setNavigationDelegate(NavigationDelegate(
-        onNavigationRequest: (request) async {
-          final uri = Uri.parse(request.url);
-          if (request.isMainFrame && await canLaunchUrl(uri)) {
-            launchUrl(uri, mode: LaunchMode.externalApplication);
-            return NavigationDecision.prevent;
-          }
-          return NavigationDecision.navigate;
-        },
+        onNavigationRequest: _onNavigationRequest,
         onPageStarted: (url) => _setWebBackgroundColor(webViewController),
         onPageFinished: (url) {
           _setWebBackgroundColor(webViewController);
@@ -161,9 +226,7 @@ class _SocialEmbedState extends State<SocialEmbed> with WidgetsBindingObserver {
           }
         },
       ));
-    if (widget.backgroundColor != null) {
-      webViewController.setBackgroundColor(widget.backgroundColor!);
-    }
+    webViewController.setBackgroundColor(_resolveBackgroundColor());
     _loadHtml(webViewController, getHtmlBody());
   }
 
@@ -183,14 +246,18 @@ class _SocialEmbedState extends State<SocialEmbed> with WidgetsBindingObserver {
   }
 
   void _setWebBackgroundColor(WebViewController controller) {
-    final color = _colorToHtmlRGBA(getBackgroundColor(context));
-    controller
-        .runJavaScript('document.body.style= "background-color: $color"');
+    final color = _colorToHtmlRGBA(_resolveBackgroundColor(context));
+    controller.runJavaScript(
+      'document.documentElement.style.backgroundColor="$color";'
+      'document.body.style.backgroundColor="$color";',
+    );
   }
 
-  Color getBackgroundColor(BuildContext context) {
-    return widget.backgroundColor ?? Theme.of(context).scaffoldBackgroundColor;
+  Color _resolveBackgroundColor([BuildContext? context]) {
+    return widget.backgroundColor ?? Colors.transparent;
   }
+
+  Color getBackgroundColor(BuildContext context) => _resolveBackgroundColor(context);
 
   String get _widgetHtml => embedData?.htmlBody ?? htmlBody;
 
@@ -200,6 +267,7 @@ class _SocialEmbedState extends State<SocialEmbed> with WidgetsBindingObserver {
           <meta name="viewport" content="width=device-width, initial-scale=${widget.htmlScale}, user-scalable=no">
           <style>
             *{box-sizing: border-box;margin:0px; padding:0px;}
+            html, body { background: transparent; }
               #widget {
                         display: flex;
                         justify-content: center;
