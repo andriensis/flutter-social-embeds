@@ -10,6 +10,9 @@ class InstagramEmbedData extends SocialMediaGenericEmbedData {
       : super(canChangeSize: true);
 
   @override
+  String get htmlBaseUrl => 'https://www.instagram.com/';
+
+  @override
   String get htmlScriptUrl => 'https://www.instagram.com/embed.js';
 
   @override

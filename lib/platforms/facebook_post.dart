@@ -10,6 +10,9 @@ class FacebookPostEmbedData extends SocialMediaGenericEmbedData {
       : super(canChangeSize: true);
 
   @override
+  String get htmlBaseUrl => 'https://www.facebook.com/';
+
+  @override
   String get htmlScriptUrl => '';
 
   @override

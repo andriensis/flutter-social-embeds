@@ -10,6 +10,9 @@ class XTwitterEmbedData extends SocialMediaGenericEmbedData {
       : super(canChangeSize: true);
 
   @override
+  String get htmlBaseUrl => 'https://twitter.com/';
+
+  @override
   String get htmlScriptUrl => 'https://platform.twitter.com/widgets.js';
 
   @override
